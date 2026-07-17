@@ -1,0 +1,101 @@
+name: Build Native Binaries
+
+on:
+  workflow_dispatch:
+  push:
+    tags:
+      - 'v*'
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    name: ${{ matrix.name }}
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - name: Linux x86_64
+            os: ubuntu-latest
+            artifact: arig-cipher-linux-x86_64
+            binary: arig-cipher
+
+          - name: Linux ARM64
+            os: ubuntu-24.04-arm
+            artifact: arig-cipher-linux-arm64
+            binary: arig-cipher
+
+          - name: Windows x86_64
+            os: windows-latest
+            artifact: arig-cipher-windows-x86_64
+            binary: arig-cipher.exe
+
+          - name: macOS ARM64
+            os: macos-14
+            artifact: arig-cipher-macos-arm64
+            binary: arig-cipher
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup GraalVM
+        uses: graalvm/setup-graalvm@v1
+        with:
+          java-version: '25'
+          distribution: 'graalvm-community'
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Cache Gradle
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.gradle/caches
+            ~/.gradle/wrapper
+          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
+          restore-keys: ${{ runner.os }}-gradle-
+
+      - name: Compile native (Unix)
+        if: runner.os != 'Windows'
+        run: ./gradlew distNative --no-daemon
+
+      - name: Compile native (Windows)
+        if: runner.os == 'Windows'
+        run: .\gradlew.bat distNative --no-daemon
+
+      - name: Package (Unix)
+        if: runner.os != 'Windows'
+        run: |
+          cd dist
+          tar czf ../${{ matrix.artifact }}.tar.gz ${{ matrix.binary }}
+
+      - name: Package (Windows)
+        if: runner.os == 'Windows'
+        run: Compress-Archive -Path dist\${{ matrix.binary }} -DestinationPath ${{ matrix.artifact }}.zip
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ matrix.artifact }}
+          path: ${{ matrix.artifact }}.*
+          retention-days: 30
+
+  release:
+    name: Create GitHub Release
+    needs: build
+    if: startsWith(github.ref, 'refs/tags/')
+    runs-on: ubuntu-latest
+    steps:
+      - name: Download all artifacts
+        uses: actions/download-artifact@v4
+        with:
+          path: artifacts
+          merge-multiple: true
+
+      - name: Create Release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: artifacts/*
+          generate_release_notes: true

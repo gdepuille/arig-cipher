@@ -1,0 +1,81 @@
+site_name: ARIG Cipher
+site_description: Application desktop de chiffrement de fichiers par l'algorithme Lucifer — projet ARIG Robotique
+site_author: ARIG Robotique
+docs_dir: docs
+repo_url: https://github.com/arig-robotique/lucifer
+repo_name: arig-robotique/lucifer
+
+theme:
+  name: material
+  language: fr
+  logo: assets/logo.png
+  favicon: assets/logo.png
+  palette:
+    - media: "(prefers-color-scheme: light)"
+      scheme: default
+      primary: green
+      accent: green
+      toggle:
+        icon: material/brightness-7
+        name: Basculer en mode sombre
+    - media: "(prefers-color-scheme: dark)"
+      scheme: slate
+      primary: green
+      accent: green
+      toggle:
+        icon: material/brightness-4
+        name: Basculer en mode clair
+  features:
+    - navigation.tabs
+    - navigation.tabs.sticky
+    - navigation.sections
+    - navigation.expand
+    - navigation.top
+    - search.suggest
+    - search.highlight
+    - search.share
+    - content.code.copy
+    - content.code.annotate
+    - toc.follow
+
+plugins:
+  - search:
+      lang: fr
+
+markdown_extensions:
+  - admonition
+  - pymdownx.details
+  - pymdownx.superfences
+  - pymdownx.highlight:
+      anchor_linenums: true
+      line_spans: __span
+      pygments_lang_class: true
+  - pymdownx.inlinehilite
+  - pymdownx.snippets
+  - pymdownx.tabbed:
+      alternate_style: true
+  - attr_list
+  - def_list
+  - tables
+  - toc:
+      permalink: true
+      title: Sur cette page
+
+nav:
+  - Accueil: index.md
+  - Guide utilisateur:
+      - Démarrage rapide: guide/getting-started.md
+      - Utilisation: guide/usage.md
+  - Référence technique:
+      - Architecture: technical/architecture.md
+      - Algorithme Lucifer: technical/cipher.md
+      - Build natif: technical/native-build.md
+
+extra:
+  social:
+    - icon: fontawesome/brands/github
+      link: https://github.com/arig-robotique
+      name: ARIG Robotique sur GitHub
+  generator: false
+
+copyright: "© ARIG Robotique — Sogelink Confidential"

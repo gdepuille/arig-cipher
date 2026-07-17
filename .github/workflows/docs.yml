@@ -1,0 +1,43 @@
+name: Deploy MkDocs Documentation
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'src/main/documentation/**'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pages: write
+  id-token: write
+
+jobs:
+  deploy:
+    name: Deploy Documentation
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.x'
+
+      - name: Cache pip
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/pip
+          key: ${{ runner.os }}-pip-${{ hashFiles('**/requirements*.txt') }}
+          restore-keys: ${{ runner.os }}-pip-
+
+      - name: Install dependencies
+        run: pip install mkdocs-material mkdocs-git-revision-date-localized-plugin
+
+      - name: Deploy documentation
+        run: mkdocs gh-deploy --config-file src/main/documentation/mkdocs.yml --force
