@@ -65,6 +65,12 @@ tasks.named<Jar>("jar") {
 graalvmNative {
 	binaries.named("main") {
 		imageName.set("arig-cipher")
+		// Spring Boot 4 + graalvm-buildtools : build/classes/java/main n'est pas
+		// automatiquement inclus dans le classpath AOT — on l'ajoute explicitement.
+		classpath(
+			tasks.named<JavaCompile>("compileJava"),
+			tasks.named<ProcessResources>("processResources"),
+		)
 		buildArgs.addAll(
 			"--no-fallback",
 			"--enable-native-access=ALL-UNNAMED",
