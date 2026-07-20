@@ -22,11 +22,11 @@ ARIG Cipher est une application desktop développée en **JavaFX + Spring Boot**
 | Fonctionnalité | Détail |
 |---|---|
 | Algorithme | Lucifer — réseau de Feistel 4 rounds |
-| Interface | JavaFX, thème sombre, couleur principale `#249D2E` |
+| Interface | JavaFX, thème sombre, couleur principale `#4CAF50` |
 | Splash screen | SVG animé logo ARIG, 5 secondes |
 | Format de sortie | Extension `.arig` avec en-tête structuré |
-| Stack technique | Java 25, Spring Boot 4.1, JavaFX |
-| Build natif | GraalVM — 4 plateformes (Linux, Windows, macOS) |
+| Stack technique | Java 25, Spring Boot 4.1, JavaFX 24 |
+| Distribution | Installers natifs (dmg/deb/msi) + binaires autonomes — 4 plateformes |
 
 ---
 
@@ -66,11 +66,11 @@ ARIG Cipher est une application desktop développée en **JavaFX + Spring Boot**
 
     [:octicons-arrow-right-24: Cipher](technical/cipher.md)
 
--   :material-package-variant:{ .lg .middle } **Build natif**
+-   :material-package-variant:{ .lg .middle } **Build & Distribution**
 
     ---
 
-    Compiler avec GraalVM, CI/CD GitHub Actions, tableau des plateformes supportées.
+    Installers jpackage, binaires natifs Liberica NIK, CI/CD GitHub Actions.
 
     [:octicons-arrow-right-24: Native build](technical/native-build.md)
 
@@ -80,7 +80,7 @@ ARIG Cipher est une application desktop développée en **JavaFX + Spring Boot**
 
 ## À propos
 
-Ce projet est développé dans le cadre de l'association **ARIG Robotique**, passionnée de robotique compétitive et de développement logiciel embarqué. ARIG Cipher illustre l'implémentation d'un algorithme de chiffrement historique dans un contexte moderne (Java 25, build natif GraalVM).
+Ce projet est développé dans le cadre de l'association **ARIG Robotique**, passionnée de robotique compétitive et de développement logiciel embarqué. ARIG Cipher illustre l'implémentation d'un algorithme de chiffrement historique dans un contexte moderne (Java 25, Liberica NIK, build natif multi-plateforme).
 
 !!! note "Contexte historique"
     L'algorithme **Lucifer** est l'ancêtre direct du standard **DES** (Data Encryption Standard). Conçu par IBM dans les années 1970, il repose sur un réseau de Feistel et a posé les bases de la cryptographie symétrique moderne. L'implémentation utilisée ici est une version éducative simplifiée.

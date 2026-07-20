@@ -10,20 +10,22 @@ Ce guide vous permet de lancer ARIG Cipher en quelques minutes, que vous souhait
 
 | Outil | Version minimale | Notes |
 |---|---|---|
-| **JDK** | Java 25+ | OpenJDK ou Oracle JDK |
+| **Liberica JDK Full** | 25 | Inclut OpenFX (JavaFX) — [télécharger](https://bell-sw.com/pages/downloads/) |
 | **Git** | Toute version récente | Pour cloner le dépôt |
 
-!!! warning "Java 25 obligatoire"
-    L'application utilise des fonctionnalités et une syntaxe spécifiques à **Java 25**. Les versions antérieures ne sont pas supportées. Vérifiez votre version avec `java --version`.
+!!! warning "Liberica JDK Full obligatoire"
+    L'application utilise **JavaFX**. La version **Full** de Liberica JDK intègre OpenFX et est nécessaire pour `bootRun`. Un JDK standard (OpenJDK, Oracle) ne suffit pas sans les dépendances JavaFX natives.
+
+    Vérifiez votre version avec `java --version` et que `javafx` est disponible.
 
 ### Optionnel — Build natif uniquement
 
 | Outil | Version recommandée | Notes |
 |---|---|---|
-| **GraalVM** | 25+ (basé sur Java 25) | Nécessaire pour `./gradlew distNative` uniquement |
+| **Liberica NIK** | 25 (basé sur Java 25) | Nécessaire pour `./gradlew distNative` uniquement |
 
-!!! tip "GraalVM pas nécessaire pour le développement"
-    Pour développer, tester ou simplement utiliser l'application, le JDK standard suffit. GraalVM n'est requis que pour produire un exécutable natif indépendant de la JVM.
+!!! tip "Liberica NIK pas nécessaire pour le développement"
+    Pour développer, tester ou simplement utiliser l'application, le **Liberica JDK Full** suffit. Le NIK (Native Image Kit) n'est requis que pour produire un binaire natif autonome.
 
 ---
 
@@ -32,15 +34,15 @@ Ce guide vous permet de lancer ARIG Cipher en quelques minutes, que vous souhait
 ### 1. Cloner le dépôt
 
 ```bash
-git clone https://github.com/arig-robotique/lucifer.git
-cd lucifer
+git clone https://github.com/gdepuille/arig-cipher.git
+cd arig-cipher
 ```
 
 ### 2. Vérifier l'environnement Java
 
 ```bash
 java --version
-# Attendu : openjdk 25.x.x ... ou similaire
+# Attendu : OpenJDK 25.x.x Liberica (Full) ou similaire
 
 ./gradlew --version
 # Affiche la version de Gradle configurée pour le projet
@@ -77,24 +79,25 @@ L'interface principale s'ouvre ensuite, permettant de chiffrer ou déchiffrer de
 ## Structure du projet
 
 ```
-lucifer/
+arig-cipher/
 ├── src/
 │   └── main/
-│       ├── java/
-│       │   └── fr/arig/cipher/
-│       │       ├── LuciferApplication.java   # Point d'entrée Spring Boot
-│       │       ├── LuciferFxApp.java          # Application JavaFX
-│       │       ├── view/
-│       │       │   ├── SplashView.java        # Splash screen SVG animé
-│       │       │   └── MainView.java          # Interface principale
-│       │       └── service/
-│       │           ├── CipherService.java     # Chiffrement / déchiffrement
-│       │           └── Lucifer.java           # Implémentation Feistel
-│       └── resources/
-│           └── logo_animated.svg             # SVG du splash screen
-├── build.gradle.kts                          # Configuration Gradle
-├── gradlew / gradlew.bat                     # Wrapper Gradle
-└── docs/                                     # Documentation MkDocs
+│       ├── java/org/arig/lucifer/
+│       │   ├── LuciferApplication.java   # Point d'entrée Spring Boot
+│       │   ├── fx/
+│       │   │   ├── LuciferFxApp.java     # Application JavaFX
+│       │   │   ├── SplashView.java       # Splash screen SVG animé
+│       │   │   ├── MainView.java         # Interface principale
+│       │   │   └── CipherService.java    # Chiffrement / déchiffrement
+│       │   └── crypt/
+│       │       └── Lucifer.java          # Algorithme Feistel (ne pas modifier)
+│       ├── resources/org/arig/lucifer/fx/
+│       │   ├── styles.css               # Palette Catppuccin + variables ARIG
+│       │   ├── logo.png / logo.icns / logo.ico
+│       │   └── logo_animated.svg        # SVG du splash screen
+│       └── documentation/               # Sources MkDocs
+├── build.gradle.kts                     # Configuration Gradle
+└── gradlew / gradlew.bat                # Wrapper Gradle
 ```
 
 ---
@@ -102,16 +105,19 @@ lucifer/
 ## Commandes utiles
 
 ```bash
-# Lancer en mode développement
+# Lancer en mode développement (JVM)
 ./gradlew bootRun
 
-# Compiler sans exécuter
+# Compiler + tests
 ./gradlew build
 
-# Lancer les tests
+# Tests unitaires
 ./gradlew test
 
-# Produire l'exécutable natif (requiert GraalVM)
+# Créer un installeur natif (dmg/deb/msi) — Liberica JDK Full
+./gradlew distJpackage
+
+# Créer un binaire autonome — Liberica NIK requis
 ./gradlew distNative
 
 # Nettoyer le build
@@ -124,4 +130,4 @@ lucifer/
 
 - [Guide d'utilisation complet](usage.md) — chiffrer et déchiffrer des fichiers pas à pas
 - [Architecture](../technical/architecture.md) — comprendre l'intégration Spring Boot + JavaFX
-- [Build natif](../technical/native-build.md) — produire un binaire autonome avec GraalVM
+- [Build & Distribution](../technical/native-build.md) — produire des installers et binaires natifs

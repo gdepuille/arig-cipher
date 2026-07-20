@@ -1,6 +1,6 @@
 # ARIG Cipher — Chiffrement Lucifer
 
-[![Build](https://github.com/arig/lucifer/actions/workflows/build.yml/badge.svg)](https://github.com/arig/lucifer/actions)
+[![Build](https://github.com/gdepuille/arig-cipher/actions/workflows/native-build.yml/badge.svg)](https://github.com/gdepuille/arig-cipher/actions)
 [![Java 25](https://img.shields.io/badge/Java-25-blue?logo=openjdk)](https://openjdk.org/projects/jdk/25/)
 [![Spring Boot 4.1](https://img.shields.io/badge/Spring%20Boot-4.1-6DB33F?logo=springboot)](https://spring.io/projects/spring-boot)
 [![JavaFX 24](https://img.shields.io/badge/JavaFX-24-orange)](https://openjfx.io/)
@@ -16,18 +16,18 @@ Application desktop de chiffrement de fichiers basée sur l'algorithme historiqu
 - Préservation du nom de fichier original dans l'en-tête du fichier `.arig`
 - Interface dark theme (palette Catppuccin + vert ARIG `#4CAF50`)
 - Splash screen animé rendu via WebView (SVG)
-- Build natif GraalVM multi-plateforme via GitHub Actions
 - Sélection de fichier par glisser-déposer ou explorateur natif
+- Distribution multi-plateforme : installers natifs (dmg/deb/msi) **et** binaires autonomes
 
 ---
 
 ## Prérequis
 
-| Outil | Version minimale |
-|---|---|
-| JDK (OpenJDK ou GraalVM CE) | 25 |
-| Gradle (wrapper fourni) | 8.x |
-| GraalVM Native Image *(build natif uniquement)* | 25 |
+| Outil | Version minimale | Notes |
+|---|---|---|
+| Liberica JDK Full | 25 | Inclut OpenFX — pour `bootRun` et `distJpackage` |
+| Gradle (wrapper fourni) | 9.x | Aucune installation requise |
+| Liberica NIK *(build natif uniquement)* | 25 | Pour `distNative` uniquement |
 
 ---
 
@@ -35,8 +35,8 @@ Application desktop de chiffrement de fichiers basée sur l'algorithme historiqu
 
 ```bash
 # Cloner le dépôt
-git clone https://github.com/arig/lucifer.git
-cd lucifer
+git clone https://github.com/gdepuille/arig-cipher.git
+cd arig-cipher
 
 # Lancer en mode développement (JVM)
 ./gradlew bootRun
@@ -46,23 +46,39 @@ Les fichiers chiffrés portent l'extension `.arig`. Le fichier original peut êt
 
 ---
 
-## Build natif
+## Distribution
 
-L'exécutable natif est produit avec GraalVM Native Image. Il est distribué via GitHub Actions pour les quatre plateformes cibles :
+Deux formats de distribution sont produits par GitHub Actions :
 
-| Plateforme | Runner GitHub Actions | Artefact |
+### Installers (jpackage)
+
+Incluent un JRE Liberica — aucune dépendance requise sur la machine cible.
+
+| Plateforme | Artefact | Format |
 |---|---|---|
-| Linux x86\_64 | `ubuntu-latest` | `lucifer-linux-x86_64` |
-| Linux ARM64 | `ubuntu-24.04-arm` | `lucifer-linux-arm64` |
-| Windows x86\_64 | `windows-latest` | `lucifer-windows-x86_64.exe` |
-| macOS ARM64 | `macos-latest` | `lucifer-macos-arm64` |
+| macOS ARM64 | `arig-cipher-macos-arm64.dmg` | Image disque |
+| Linux x86\_64 | `arig-cipher-linux-x86_64.deb` | Paquet Debian |
+| Linux ARM64 | `arig-cipher-linux-arm64.deb` | Paquet Debian |
+| Windows x86\_64 | `arig-cipher-windows-x86_64.msi` | Installeur MSI |
+
+### Binaires autonomes (Liberica NIK)
+
+Exécutables seuls, sans JVM ni installeur.
+
+| Plateforme | Artefact |
+|---|---|
+| macOS ARM64 | `arig-cipher-macos-arm64-bin` |
+| Linux x86\_64 | `arig-cipher-linux-x86_64-bin` |
+| Linux ARM64 | `arig-cipher-linux-arm64-bin` |
+| Windows x86\_64 | `arig-cipher-windows-x86_64-bin.exe` |
 
 ```bash
-# Build natif local (nécessite GraalVM avec native-image installé)
+# Build installeur local (Liberica JDK Full requis)
+./gradlew distJpackage
+
+# Build binaire autonome local (Liberica NIK requis)
 ./gradlew distNative
 ```
-
-Le binaire produit est autonome et ne nécessite pas de JVM sur la machine cible.
 
 ---
 
