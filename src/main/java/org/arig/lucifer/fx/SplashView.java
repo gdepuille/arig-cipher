@@ -2,7 +2,10 @@ package org.arig.lucifer.fx;
 
 import javafx.animation.FadeTransition;
 import javafx.animation.PauseTransition;
+import javafx.scene.Node;
 import javafx.scene.Scene;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.scene.web.WebView;
@@ -28,10 +31,38 @@ public class SplashView {
     }
 
     public void show() throws Exception {
+        Node content;
+        try {
+            content = buildWebViewContent();
+        } catch (UnsatisfiedLinkError e) {
+            // jfxwebkit n'est pas disponible en native image — fallback logo statique
+            content = buildImageFallback();
+        }
+
+        StackPane root = new StackPane(content);
+        root.setStyle("-fx-background-color: #1e1e2e;");
+
+        Scene scene = new Scene(root, 660, 380);
+        scene.setFill(Color.web("#1e1e2e"));
+
+        splashStage.initStyle(StageStyle.UNDECORATED);
+        splashStage.setScene(scene);
+        splashStage.centerOnScreen();
+        splashStage.show();
+
+        // Click to dismiss early
+        scene.setOnMouseClicked(e -> dismiss(root));
+
+        // Auto-dismiss after the animation has played
+        PauseTransition pause = new PauseTransition(Duration.seconds(DISPLAY_SECONDS));
+        pause.setOnFinished(e -> dismiss(root));
+        pause.play();
+    }
+
+    private Node buildWebViewContent() throws Exception {
         URL svgUrl = getClass().getResource("/org/arig/lucifer/fx/logo_animated.svg");
         String svgRaw = new String(svgUrl.openStream().readAllBytes(), StandardCharsets.UTF_8);
 
-        // Make the SVG scale to fill the container width
         String svgScaled = svgRaw
                 .replaceFirst("width=\"[^\"]+\"", "width=\"100%\"")
                 .replaceFirst("height=\"[^\"]+\"", "height=\"auto\"");
@@ -61,25 +92,15 @@ public class SplashView {
         WebView webView = new WebView();
         webView.setContextMenuEnabled(false);
         webView.getEngine().loadContent(html, "text/html");
+        return webView;
+    }
 
-        StackPane root = new StackPane(webView);
-        root.setStyle("-fx-background-color: #1e1e2e;");
-
-        Scene scene = new Scene(root, 660, 380);
-        scene.setFill(Color.web("#1e1e2e"));
-
-        splashStage.initStyle(StageStyle.UNDECORATED);
-        splashStage.setScene(scene);
-        splashStage.centerOnScreen();
-        splashStage.show();
-
-        // Click to dismiss early
-        scene.setOnMouseClicked(e -> dismiss(root));
-
-        // Auto-dismiss after the animation has played
-        PauseTransition pause = new PauseTransition(Duration.seconds(DISPLAY_SECONDS));
-        pause.setOnFinished(e -> dismiss(root));
-        pause.play();
+    private Node buildImageFallback() {
+        Image logo = new Image(getClass().getResourceAsStream("/org/arig/lucifer/fx/logo.png"));
+        ImageView view = new ImageView(logo);
+        view.setFitWidth(400);
+        view.setPreserveRatio(true);
+        return view;
     }
 
     private void dismiss(StackPane root) {
