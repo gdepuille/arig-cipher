@@ -9,13 +9,17 @@ on:
   workflow_dispatch:
 
 permissions:
-  contents: write
+  contents: read
   pages: write
   id-token: write
 
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
 jobs:
-  deploy:
-    name: Deploy Documentation
+  build:
+    name: Build Documentation
     runs-on: ubuntu-latest
 
     steps:
@@ -39,5 +43,26 @@ jobs:
       - name: Install dependencies
         run: pip install mkdocs-material mkdocs-git-revision-date-localized-plugin
 
-      - name: Deploy documentation
-        run: mkdocs gh-deploy --config-file src/main/documentation/mkdocs.yml --force
+      - name: Configure Pages
+        uses: actions/configure-pages@v5
+
+      - name: Build documentation
+        run: mkdocs build --config-file src/main/documentation/mkdocs.yml
+
+      - name: Upload Pages artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: src/main/documentation/site
+
+  deploy:
+    name: Deploy to GitHub Pages
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
