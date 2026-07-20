@@ -113,7 +113,8 @@ jobs:
             --main-jar arig-cipher.jar `
             --type ${{ matrix.type }} `
             --dest dist `
-            --java-options "--enable-native-access=ALL-UNNAMED"
+            --java-options "--enable-native-access=ALL-UNNAMED" `
+            --icon src/main/resources/org/arig/lucifer/fx/logo.ico
 
       - name: Rename artifact (Unix)
         if: runner.os != 'Windows'

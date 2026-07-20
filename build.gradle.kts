@@ -73,7 +73,7 @@ tasks.register<Exec>("distJpackage") {
 	val appVersion = version.toString().substringBefore("-")
 	val iconFile = when {
 		"mac" in os -> layout.projectDirectory.file("src/main/resources/org/arig/lucifer/fx/logo.icns").asFile
-		"win" in os -> null
+		"win" in os -> layout.projectDirectory.file("src/main/resources/org/arig/lucifer/fx/logo.ico").asFile
 		else        -> layout.projectDirectory.file("src/main/resources/org/arig/lucifer/fx/logo.png").asFile
 	}
 
