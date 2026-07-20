@@ -1,1 +1,1 @@
-rootProject.name = "Lucifer"
+rootProject.name = "arig-cipher"
