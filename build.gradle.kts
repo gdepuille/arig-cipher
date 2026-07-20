@@ -69,16 +69,24 @@ tasks.register<Exec>("distJpackage") {
 	dependsOn("bootJar")
 
 	val outputDir = layout.projectDirectory.dir("dist").asFile
+	val os = System.getProperty("os.name").lowercase()
+	val appVersion = version.toString().substringBefore("-")
+	val iconFile = when {
+		"mac" in os -> layout.projectDirectory.file("src/main/resources/org/arig/lucifer/fx/logo.icns").asFile
+		"win" in os -> null
+		else        -> layout.projectDirectory.file("src/main/resources/org/arig/lucifer/fx/logo.png").asFile
+	}
+
 	doFirst { outputDir.mkdirs() }
 
 	commandLine(buildList {
 		add("jpackage")
 		add("--name"); add("ARIG Cipher")
-		add("--app-version"); add(version.toString())
+		add("--app-version"); add(appVersion)
 		add("--input"); add(layout.buildDirectory.dir("libs").get().asFile.absolutePath)
 		add("--main-jar"); add("arig-cipher.jar")
 		add("--dest"); add(outputDir.absolutePath)
 		add("--java-options"); add("--enable-native-access=ALL-UNNAMED")
-		add("--icon"); add(layout.projectDirectory.file("src/main/resources/org/arig/lucifer/fx/logo.png").asFile.absolutePath)
+		if (iconFile != null) { add("--icon"); add(iconFile.absolutePath) }
 	})
 }

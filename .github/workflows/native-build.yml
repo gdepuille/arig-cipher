@@ -73,8 +73,22 @@ jobs:
         if: runner.os == 'Linux'
         run: sudo apt-get install -y fakeroot
 
-      - name: Create installer (macOS / Linux)
-        if: runner.os != 'Windows'
+      - name: Create installer (macOS)
+        if: runner.os == 'macOS'
+        run: |
+          mkdir -p dist
+          jpackage \
+            --name "ARIG Cipher" \
+            --app-version "0.0.1" \
+            --input build/libs \
+            --main-jar arig-cipher.jar \
+            --type ${{ matrix.type }} \
+            --dest dist \
+            --java-options "--enable-native-access=ALL-UNNAMED" \
+            --icon src/main/resources/org/arig/lucifer/fx/logo.icns
+
+      - name: Create installer (Linux)
+        if: runner.os == 'Linux'
         run: |
           mkdir -p dist
           jpackage \
@@ -86,7 +100,7 @@ jobs:
             --dest dist \
             --java-options "--enable-native-access=ALL-UNNAMED" \
             --icon src/main/resources/org/arig/lucifer/fx/logo.png \
-            ${{ matrix.type == 'deb' && '--linux-deb-maintainer gregory.depuille@sogelink.com' || '' }}
+            --linux-deb-maintainer gregory.depuille@sogelink.com
 
       - name: Create installer (Windows)
         if: runner.os == 'Windows'
