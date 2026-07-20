@@ -50,7 +50,7 @@ jobs:
       - name: Setup Liberica JDK 25 avec JavaFX
         uses: graalvm/setup-graalvm@v1
         with:
-          java-version: '25'
+          java-version: '25.0.3+11'
           distribution: 'liberica'
           java-package: 'jdk+fx'
           github-token: ${{ secrets.GITHUB_TOKEN }}
@@ -181,7 +181,7 @@ jobs:
       - name: Setup Liberica NIK 25 avec JavaFX
         uses: graalvm/setup-graalvm@v1
         with:
-          java-version: '25'
+          java-version: '25.0.3+11'
           distribution: 'liberica'
           java-package: 'jdk+fx'
           github-token: ${{ secrets.GITHUB_TOKEN }}
