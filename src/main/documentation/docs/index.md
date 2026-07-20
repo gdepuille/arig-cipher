@@ -1,86 +1,54 @@
 # ARIG Cipher
 
-```
- █████╗ ██████╗ ██╗ ██████╗      ██████╗██╗██████╗ ██╗  ██╗███████╗██████╗
-██╔══██╗██╔══██╗██║██╔════╝     ██╔════╝██║██╔══██╗██║  ██║██╔════╝██╔══██╗
-███████║██████╔╝██║██║  ███╗    ██║     ██║██████╔╝███████║█████╗  ██████╔╝
-██╔══██║██╔══██╗██║██║   ██║    ██║     ██║██╔═══╝ ██╔══██║██╔══╝  ██╔══██╗
-██║  ██║██║  ██║██║╚██████╔╝    ╚██████╗██║██║     ██║  ██║███████╗██║  ██║
-╚═╝  ╚═╝╚═╝  ╚═╝╚═╝ ╚═════╝      ╚═════╝╚═╝╚═╝     ╚═╝  ╚═╝╚══════╝╚═╝  ╚═╝
-```
+**Chiffrez et déchiffrez vos fichiers en quelques clics.**
 
-**Application desktop de chiffrement de fichiers — projet [ARIG Robotique](https://github.com/arig-robotique)**
+ARIG Cipher est une application desktop gratuite qui protège vos fichiers à l'aide de l'algorithme **Lucifer**, un chiffrement historique développé par IBM dans les années 1970 — ancêtre du standard DES. L'interface est simple, sombre et sans distraction.
 
 ---
 
-## Présentation
+## Télécharger
 
-ARIG Cipher est une application desktop développée en **JavaFX + Spring Boot**, conçue pour chiffrer et déchiffrer des fichiers à l'aide de l'algorithme **Lucifer** (réseau de Feistel à 4 rounds). Elle est destinée à protéger des fichiers sensibles tout en offrant une interface graphique soignée et minimaliste, aux couleurs de l'association ARIG Robotique.
+[:material-download: Télécharger la dernière version](https://github.com/gdepuille/arig-cipher/releases/latest){ .md-button .md-button--primary }
 
-### Caractéristiques principales
+Choisissez le format adapté à votre système :
 
-| Fonctionnalité | Détail |
-|---|---|
-| Algorithme | Lucifer — réseau de Feistel 4 rounds |
-| Interface | JavaFX, thème sombre, couleur principale `#4CAF50` |
-| Splash screen | SVG animé logo ARIG, 5 secondes |
-| Format de sortie | Extension `.arig` avec en-tête structuré |
-| Stack technique | Java 25, Spring Boot 4.1, JavaFX 24 |
-| Distribution | Installers natifs (dmg/deb/msi) + binaires autonomes — 4 plateformes |
+| Système | Format | Notes |
+|---|---|---|
+| **macOS** ARM64 (Apple Silicon) | `.dmg` | Image disque — glisser dans Applications |
+| **Linux** x86\_64 | `.deb` | Paquet Debian/Ubuntu |
+| **Linux** ARM64 | `.deb` | Paquet Debian/Ubuntu |
+| **Windows** x86\_64 | `.zip` | Portable — extraire et exécuter |
+
+!!! tip "Binaires autonomes disponibles"
+    Des binaires natifs sans installation sont également disponibles sur la [page des releases](https://github.com/gdepuille/arig-cipher/releases/latest) pour les utilisateurs avancés.
 
 ---
 
-## Navigation rapide
+## En un coup d'œil
 
 <div class="grid cards" markdown>
 
--   :material-rocket-launch:{ .lg .middle } **Démarrage rapide**
+-   :material-lock:{ .lg .middle } **Chiffrement simple**
 
     ---
 
-    Installez les prérequis, clonez le projet et lancez l'application en quelques minutes.
+    Glissez un fichier, chiffrez-le. Le fichier protégé porte l'extension `.arig` et peut être déchiffré uniquement avec ARIG Cipher.
 
-    [:octicons-arrow-right-24: Getting started](guide/getting-started.md)
+    [:octicons-arrow-right-24: Guide d'utilisation](guide/usage.md)
 
--   :material-file-lock:{ .lg .middle } **Guide d'utilisation**
-
-    ---
-
-    Apprenez à chiffrer et déchiffrer des fichiers, comprenez le format `.arig`.
-
-    [:octicons-arrow-right-24: Utilisation](guide/usage.md)
-
--   :material-cogs:{ .lg .middle } **Architecture**
+-   :material-rocket-launch:{ .lg .middle } **Installation rapide**
 
     ---
 
-    Intégration Spring Boot + JavaFX, cycle de vie de l'application, structure des packages.
+    Téléchargez l'installeur ou le binaire pour votre plateforme. Aucune dépendance requise.
 
-    [:octicons-arrow-right-24: Architecture](technical/architecture.md)
-
--   :material-lock-check:{ .lg .middle } **Algorithme Lucifer**
-
-    ---
-
-    Description du réseau de Feistel, format de l'en-tête `.arig`, limitations connues.
-
-    [:octicons-arrow-right-24: Cipher](technical/cipher.md)
-
--   :material-package-variant:{ .lg .middle } **Build & Distribution**
-
-    ---
-
-    Installers jpackage, binaires natifs Liberica NIK, CI/CD GitHub Actions.
-
-    [:octicons-arrow-right-24: Native build](technical/native-build.md)
+    [:octicons-arrow-right-24: Installation](guide/getting-started.md)
 
 </div>
 
 ---
 
-## À propos
+## Avertissement
 
-Ce projet est développé dans le cadre de l'association **ARIG Robotique**, passionnée de robotique compétitive et de développement logiciel embarqué. ARIG Cipher illustre l'implémentation d'un algorithme de chiffrement historique dans un contexte moderne (Java 25, Liberica NIK, build natif multi-plateforme).
-
-!!! note "Contexte historique"
-    L'algorithme **Lucifer** est l'ancêtre direct du standard **DES** (Data Encryption Standard). Conçu par IBM dans les années 1970, il repose sur un réseau de Feistel et a posé les bases de la cryptographie symétrique moderne. L'implémentation utilisée ici est une version éducative simplifiée.
+!!! warning "Usage éducatif"
+    ARIG Cipher utilise une clé fixe et publique. Il est adapté à un usage interne ou pédagogique, **pas** à la protection de données confidentielles en environnement hostile.

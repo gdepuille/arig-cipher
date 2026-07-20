@@ -1,133 +1,81 @@
-# Démarrage rapide
+# Installation
 
-Ce guide vous permet de lancer ARIG Cipher en quelques minutes, que vous souhaitiez simplement exécuter l'application ou contribuer au projet.
-
----
-
-## Prérequis
-
-### Requis
-
-| Outil | Version minimale | Notes |
-|---|---|---|
-| **Liberica JDK Full** | 25 | Inclut OpenFX (JavaFX) — [télécharger](https://bell-sw.com/pages/downloads/) |
-| **Git** | Toute version récente | Pour cloner le dépôt |
-
-!!! warning "Liberica JDK Full obligatoire"
-    L'application utilise **JavaFX**. La version **Full** de Liberica JDK intègre OpenFX et est nécessaire pour `bootRun`. Un JDK standard (OpenJDK, Oracle) ne suffit pas sans les dépendances JavaFX natives.
-
-    Vérifiez votre version avec `java --version` et que `javafx` est disponible.
-
-### Optionnel — Build natif uniquement
-
-| Outil | Version recommandée | Notes |
-|---|---|---|
-| **Liberica NIK** | 25 (basé sur Java 25) | Nécessaire pour `./gradlew distNative` uniquement |
-
-!!! tip "Liberica NIK pas nécessaire pour le développement"
-    Pour développer, tester ou simplement utiliser l'application, le **Liberica JDK Full** suffit. Le NIK (Native Image Kit) n'est requis que pour produire un binaire natif autonome.
+ARIG Cipher est disponible en deux formats : un **installeur** qui intègre tout le nécessaire, et un **binaire autonome** pour les utilisateurs qui préfèrent ne rien installer.
 
 ---
 
-## Installation
+## Télécharger
 
-### 1. Cloner le dépôt
-
-```bash
-git clone https://github.com/gdepuille/arig-cipher.git
-cd arig-cipher
-```
-
-### 2. Vérifier l'environnement Java
-
-```bash
-java --version
-# Attendu : OpenJDK 25.x.x Liberica (Full) ou similaire
-
-./gradlew --version
-# Affiche la version de Gradle configurée pour le projet
-```
-
-### 3. Lancer l'application (mode développement)
-
-```bash
-./gradlew bootRun
-```
-
-!!! note "Premier lancement"
-    Gradle téléchargera automatiquement les dépendances lors du premier lancement. Comptez quelques minutes selon votre connexion internet.
-
-Sur Windows, utilisez :
-
-```powershell
-.\gradlew.bat bootRun
-```
+Rendez-vous sur la [page des releases](https://github.com/gdepuille/arig-cipher/releases/latest) et téléchargez le fichier correspondant à votre système.
 
 ---
 
-## Première utilisation
+## Installeur (recommandé)
 
-Au démarrage, l'application affiche un **splash screen** avec le logo animé ARIG Robotique. Vous pouvez :
+=== "macOS (Apple Silicon)"
 
-- **Attendre** : le splash disparaît automatiquement après 5 secondes avec un fondu
-- **Cliquer** : fermer immédiatement le splash screen
+    1. Téléchargez `arig-cipher-macos-arm64.dmg`
+    2. Ouvrez le fichier `.dmg`
+    3. Glissez **ARIG Cipher** dans le dossier **Applications**
+    4. Lancez l'application depuis le Launchpad ou Spotlight
 
-L'interface principale s'ouvre ensuite, permettant de chiffrer ou déchiffrer des fichiers.
+    !!! note "Gatekeeper"
+        Si macOS bloque l'ouverture, faites **clic droit → Ouvrir** sur l'application la première fois.
 
----
+=== "Linux (x86_64 / ARM64)"
 
-## Structure du projet
+    Téléchargez le fichier `.deb` correspondant à votre architecture, puis installez-le :
 
-```
-arig-cipher/
-├── src/
-│   └── main/
-│       ├── java/org/arig/lucifer/
-│       │   ├── LuciferApplication.java   # Point d'entrée Spring Boot
-│       │   ├── fx/
-│       │   │   ├── LuciferFxApp.java     # Application JavaFX
-│       │   │   ├── SplashView.java       # Splash screen SVG animé
-│       │   │   ├── MainView.java         # Interface principale
-│       │   │   └── CipherService.java    # Chiffrement / déchiffrement
-│       │   └── crypt/
-│       │       └── Lucifer.java          # Algorithme Feistel (ne pas modifier)
-│       ├── resources/org/arig/lucifer/fx/
-│       │   ├── styles.css               # Palette Catppuccin + variables ARIG
-│       │   ├── logo.png / logo.icns / logo.ico
-│       │   └── logo_animated.svg        # SVG du splash screen
-│       └── documentation/               # Sources MkDocs
-├── build.gradle.kts                     # Configuration Gradle
-└── gradlew / gradlew.bat                # Wrapper Gradle
-```
+    ```bash
+    # x86_64
+    sudo dpkg -i arig-cipher-linux-x86_64.deb
 
----
+    # ARM64
+    sudo dpkg -i arig-cipher-linux-arm64.deb
+    ```
 
-## Commandes utiles
+    L'application est ensuite accessible depuis votre menu d'applications.
 
-```bash
-# Lancer en mode développement (JVM)
-./gradlew bootRun
+=== "Windows (x86_64)"
 
-# Compiler + tests
-./gradlew build
+    1. Téléchargez `arig-cipher-windows-x86_64.zip`
+    2. Extrayez le contenu du fichier ZIP (clic droit → Extraire tout)
+    3. Ouvrez le dossier extrait
+    4. Double-cliquez sur **ARIG Cipher.exe**
 
-# Tests unitaires
-./gradlew test
-
-# Créer un installeur natif (dmg/deb/msi) — Liberica JDK Full
-./gradlew distJpackage
-
-# Créer un binaire autonome — Liberica NIK requis
-./gradlew distNative
-
-# Nettoyer le build
-./gradlew clean
-```
+    Aucune installation requise — vous pouvez placer le dossier où vous le souhaitez.
 
 ---
 
-## Étapes suivantes
+## Binaire autonome
 
-- [Guide d'utilisation complet](usage.md) — chiffrer et déchiffrer des fichiers pas à pas
-- [Architecture](../technical/architecture.md) — comprendre l'intégration Spring Boot + JavaFX
-- [Build & Distribution](../technical/native-build.md) — produire des installers et binaires natifs
+Pour les utilisateurs qui préfèrent un exécutable sans dossier d'installation :
+
+=== "macOS / Linux"
+
+    1. Téléchargez le binaire (`arig-cipher-macos-arm64-bin` ou `arig-cipher-linux-*-bin`)
+    2. Rendez-le exécutable :
+
+    ```bash
+    chmod +x arig-cipher-*-bin
+    ```
+
+    3. Lancez-le :
+
+    ```bash
+    ./arig-cipher-*-bin
+    ```
+
+=== "Windows"
+
+    Téléchargez `arig-cipher-windows-x86_64-bin.exe` et double-cliquez dessus.
+
+---
+
+## Premier lancement
+
+Au démarrage, un **splash screen** s'affiche pendant quelques secondes. Cliquez dessus pour passer directement à l'interface principale.
+
+L'application est prête à l'emploi — aucune configuration n'est nécessaire.
+
+[:octicons-arrow-right-24: Apprendre à chiffrer et déchiffrer des fichiers](usage.md)

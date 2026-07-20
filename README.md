@@ -100,7 +100,11 @@ Les dépendances JavaFX sont détectées automatiquement selon la plateforme cib
 
 ## Documentation
 
-La documentation complète est disponible sur **[gdepuille.github.io/arig-cipher](https://gdepuille.github.io/arig-cipher/)** — guide d'utilisation, architecture, référence technique.
+- **Guide utilisateur** : [gdepuille.github.io/arig-cipher](https://gdepuille.github.io/arig-cipher/) — installation, utilisation
+- **Référence technique** (développeurs) :
+  - [Architecture](docs/architecture.md) — intégration Spring Boot + JavaFX, cycle de vie
+  - [Algorithme Lucifer](docs/cipher.md) — réseau de Feistel, format `.arig`, limitations
+  - [Build & Distribution](docs/build.md) — jpackage, Liberica NIK, CI/CD
 
 ---
 

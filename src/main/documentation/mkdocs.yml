@@ -27,16 +27,10 @@ theme:
         icon: material/brightness-4
         name: Basculer en mode clair
   features:
-    - navigation.tabs
-    - navigation.tabs.sticky
-    - navigation.sections
-    - navigation.expand
     - navigation.top
     - search.suggest
     - search.highlight
-    - search.share
     - content.code.copy
-    - content.code.annotate
     - toc.follow
 
 plugins:
@@ -52,11 +46,7 @@ markdown_extensions:
       line_spans: __span
       pygments_lang_class: true
   - pymdownx.inlinehilite
-  - pymdownx.snippets
-  - pymdownx.tabbed:
-      alternate_style: true
   - attr_list
-  - def_list
   - tables
   - toc:
       permalink: true
@@ -64,19 +54,14 @@ markdown_extensions:
 
 nav:
   - Accueil: index.md
-  - Guide utilisateur:
-      - Démarrage rapide: guide/getting-started.md
-      - Utilisation: guide/usage.md
-  - Référence technique:
-      - Architecture: technical/architecture.md
-      - Algorithme Lucifer: technical/cipher.md
-      - Build natif: technical/native-build.md
+  - Installation: guide/getting-started.md
+  - Utilisation: guide/usage.md
 
 extra:
   social:
     - icon: fontawesome/brands/github
-      link: https://github.com/arig-robotique
-      name: ARIG Robotique sur GitHub
+      link: https://github.com/gdepuille/arig-cipher
+      name: ARIG Cipher sur GitHub
   generator: false
 
 copyright: "© ARIG Robotique — Sogelink Confidential"
