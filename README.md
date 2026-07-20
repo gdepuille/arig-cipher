@@ -1,6 +1,7 @@
 # ARIG Cipher — Chiffrement Lucifer
 
 [![Build](https://github.com/gdepuille/arig-cipher/actions/workflows/native-build.yml/badge.svg)](https://github.com/gdepuille/arig-cipher/actions)
+[![Documentation](https://img.shields.io/badge/docs-GitHub%20Pages-blue?logo=readthedocs)](https://gdepuille.github.io/arig-cipher/)
 [![Java 25](https://img.shields.io/badge/Java-25-blue?logo=openjdk)](https://openjdk.org/projects/jdk/25/)
 [![Spring Boot 4.1](https://img.shields.io/badge/Spring%20Boot-4.1-6DB33F?logo=springboot)](https://spring.io/projects/spring-boot)
 [![JavaFX 24](https://img.shields.io/badge/JavaFX-24-orange)](https://openjfx.io/)
@@ -94,6 +95,12 @@ LuciferApplication          Spring Boot main + CommandLineRunner
 ```
 
 Les dépendances JavaFX sont détectées automatiquement selon la plateforme cible dans `build.gradle.kts`. Spring Boot gère l'injection de dépendances ; JavaFX prend ensuite la main sur le thread UI via le `CommandLineRunner`.
+
+---
+
+## Documentation
+
+La documentation complète est disponible sur **[gdepuille.github.io/arig-cipher](https://gdepuille.github.io/arig-cipher/)** — guide d'utilisation, architecture, référence technique.
 
 ---
 
