@@ -121,6 +121,7 @@ tasks.register<Exec>("distJpackage") {
 		add("--main-jar"); add("arig-cipher.jar")
 		add("--dest"); add(outputDir.absolutePath)
 		add("--java-options"); add("--enable-native-access=ALL-UNNAMED")
+		if ("win" in os) { add("--type"); add("app-image") }
 		if (iconFile != null) { add("--icon"); add(iconFile.absolutePath) }
 	})
 }

@@ -34,8 +34,8 @@ jobs:
           - name: Windows x86_64
             os: windows-2025
             artifact: arig-cipher-windows-x86_64
-            type: msi
-            ext: msi
+            type: app-image
+            ext: zip
 
           - name: macOS ARM64
             os: macos-26
@@ -135,9 +135,9 @@ jobs:
         if: runner.os != 'Windows'
         run: mv dist/*.${{ matrix.ext }} dist/${{ matrix.artifact }}.${{ matrix.ext }}
 
-      - name: Rename artifact (Windows)
+      - name: Package artifact (Windows — zip app-image)
         if: runner.os == 'Windows'
-        run: Get-ChildItem dist\*.${{ matrix.ext }} | Rename-Item -NewName "${{ matrix.artifact }}.${{ matrix.ext }}"
+        run: Compress-Archive -Path "dist\ARIG Cipher" -DestinationPath "dist\${{ matrix.artifact }}.zip"
 
       - name: Upload artifact
         uses: actions/upload-artifact@v4
