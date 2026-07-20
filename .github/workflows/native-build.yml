@@ -50,9 +50,9 @@ jobs:
       - name: Setup Liberica JDK 25 avec JavaFX
         uses: graalvm/setup-graalvm@v1
         with:
-          java-version: '25.0.3+11'
+          java-version: '25'
           distribution: 'liberica'
-          java-package: 'jdk+fx'
+          java-package: 'jdk'
           github-token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Print JDK/GraalVM versions
@@ -159,10 +159,10 @@ jobs:
             artifact: arig-cipher-linux-x86_64-bin
             binary: arig-cipher
 
-          - name: Linux ARM64
-            os: ubuntu-26.04-arm
-            artifact: arig-cipher-linux-arm64-bin
-            binary: arig-cipher
+          #- name: Linux ARM64
+          #  os: ubuntu-26.04-arm
+          #  artifact: arig-cipher-linux-arm64-bin
+          #  binary: arig-cipher
 
           - name: Windows x86_64
             os: windows-2025
@@ -181,7 +181,7 @@ jobs:
       - name: Setup Liberica NIK 25 avec JavaFX
         uses: graalvm/setup-graalvm@v1
         with:
-          java-version: '25.0.3+11'
+          java-version: '25'
           distribution: 'liberica'
           java-package: 'jdk+fx'
           github-token: ${{ secrets.GITHUB_TOKEN }}
