@@ -40,7 +40,7 @@ L'installeur est produit dans `dist/`.
 
 === "macOS"
     ```bash
-    open dist/"ARIG Cipher-0.0.1.dmg"
+    open dist/"ARIG Cipher-*.dmg"
     ```
 
 === "Linux"
