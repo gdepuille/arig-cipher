@@ -1,4 +1,4 @@
-name: Build Native Binaries
+name: Build Native Installers
 
 on:
   workflow_dispatch:
@@ -20,28 +20,32 @@ jobs:
           - name: Linux x86_64
             os: ubuntu-latest
             artifact: arig-cipher-linux-x86_64
-            binary: arig-cipher
+            type: deb
+            ext: deb
 
           - name: Linux ARM64
             os: ubuntu-24.04-arm
             artifact: arig-cipher-linux-arm64
-            binary: arig-cipher
+            type: deb
+            ext: deb
 
           - name: Windows x86_64
             os: windows-latest
             artifact: arig-cipher-windows-x86_64
-            binary: arig-cipher.exe
+            type: msi
+            ext: msi
 
           - name: macOS ARM64
             os: macos-14
             artifact: arig-cipher-macos-arm64
-            binary: arig-cipher
+            type: dmg
+            ext: dmg
 
     steps:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Setup GraalVM
+      - name: Setup GraalVM JDK 25
         uses: graalvm/setup-graalvm@v1
         with:
           java-version: '25'
@@ -57,29 +61,63 @@ jobs:
           key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
           restore-keys: ${{ runner.os }}-gradle-
 
-      - name: Compile native (Unix)
+      - name: Build JAR (Unix)
         if: runner.os != 'Windows'
-        run: ./gradlew distNative --no-daemon
+        run: ./gradlew bootJar --no-daemon
 
-      - name: Compile native (Windows)
+      - name: Build JAR (Windows)
         if: runner.os == 'Windows'
-        run: .\gradlew.bat distNative --no-daemon
+        run: .\gradlew.bat bootJar --no-daemon
 
-      - name: Package (Unix)
+      - name: Install jpackage dependencies (Linux)
+        if: runner.os == 'Linux'
+        run: sudo apt-get install -y fakeroot
+
+      - name: Create installer (macOS / Linux)
+        if: runner.os != 'Windows'
+        run: |
+          mkdir -p dist
+          jpackage \
+            --name "ARIG Cipher" \
+            --app-version "0.0.1" \
+            --input build/libs \
+            --main-jar arig-cipher.jar \
+            --type ${{ matrix.type }} \
+            --dest dist \
+            --java-options "--enable-native-access=ALL-UNNAMED" \
+            --icon src/main/resources/org/arig/lucifer/fx/logo.png \
+            ${{ matrix.type == 'deb' && '--linux-deb-maintainer gregory.depuille@sogelink.com' || '' }}
+
+      - name: Create installer (Windows)
+        if: runner.os == 'Windows'
+        run: |
+          New-Item -ItemType Directory -Force -Path dist
+          jpackage `
+            --name "ARIG Cipher" `
+            --app-version "0.0.1" `
+            --input build/libs `
+            --main-jar arig-cipher.jar `
+            --type ${{ matrix.type }} `
+            --dest dist `
+            --java-options "--enable-native-access=ALL-UNNAMED"
+
+      - name: Rename artifact (Unix)
         if: runner.os != 'Windows'
         run: |
           cd dist
-          tar czf ../${{ matrix.artifact }}.tar.gz ${{ matrix.binary }}
+          mv *.${{ matrix.ext }} ${{ matrix.artifact }}.${{ matrix.ext }}
 
-      - name: Package (Windows)
+      - name: Rename artifact (Windows)
         if: runner.os == 'Windows'
-        run: Compress-Archive -Path dist\${{ matrix.binary }} -DestinationPath ${{ matrix.artifact }}.zip
+        run: |
+          cd dist
+          Get-ChildItem -Filter "*.${{ matrix.ext }}" | Rename-Item -NewName "${{ matrix.artifact }}.${{ matrix.ext }}"
 
       - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:
           name: ${{ matrix.artifact }}
-          path: ${{ matrix.artifact }}.*
+          path: dist/${{ matrix.artifact }}.${{ matrix.ext }}
           retention-days: 30
 
   release:

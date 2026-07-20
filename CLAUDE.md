@@ -7,7 +7,7 @@
 | `./gradlew bootRun` | Lancer en mode dev (JVM, hot reload) |
 | `./gradlew build` | Compiler + tests |
 | `./gradlew test` | Tests unitaires uniquement |
-| `./gradlew distNative` | Build exécutable natif GraalVM |
+| `./gradlew distJpackage` | Build installeur natif via jpackage (dmg/deb/msi) |
 | `./gradlew clean` | Nettoyer le répertoire `build/` |
 
 ---
@@ -16,7 +16,7 @@
 
 ```
 lucifer/
-├── build.gradle.kts                  Configuration Gradle (JavaFX platform-specific, GraalVM)
+├── build.gradle.kts                  Configuration Gradle (JavaFX platform-specific, jpackage)
 ├── settings.gradle.kts
 ├── src/
 │   └── main/

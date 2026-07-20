@@ -54,25 +54,31 @@ tasks.named<org.springframework.boot.gradle.tasks.run.BootRun>("bootRun") {
 	jvmArgs("--enable-native-access=ALL-UNNAMED")
 }
 
-graalvmNative {
-	binaries.named("main") {
-		imageName.set("arig-cipher")
-		buildArgs.addAll(
-			"--no-fallback",
-			"--enable-native-access=ALL-UNNAMED",
-			"-H:+AddAllCharsets"
-		)
-	}
+tasks.named<org.springframework.boot.gradle.tasks.bundling.BootJar>("bootJar") {
+	archiveFileName.set("arig-cipher.jar")
 }
 
-// Compile en natif et copie le binaire dans dist/
-// Usage local : ./gradlew distNative
-tasks.register<Copy>("distNative") {
+tasks.named<Jar>("jar") {
+	enabled = false
+}
+
+// Package avec jpackage pour usage local : ./gradlew distJpackage
+tasks.register<Exec>("distJpackage") {
 	group = "distribution"
-	description = "Compile en natif et copie le binaire dans dist/"
-	dependsOn("nativeCompile")
-	from(layout.buildDirectory.dir("native/nativeCompile")) {
-		include("arig-cipher*")
-	}
-	into(layout.projectDirectory.dir("dist"))
+	description = "Crée un installeur natif avec jpackage dans dist/"
+	dependsOn("bootJar")
+
+	val outputDir = layout.projectDirectory.dir("dist").asFile
+	doFirst { outputDir.mkdirs() }
+
+	commandLine(buildList {
+		add("jpackage")
+		add("--name"); add("ARIG Cipher")
+		add("--app-version"); add(version.toString())
+		add("--input"); add(layout.buildDirectory.dir("libs").get().asFile.absolutePath)
+		add("--main-jar"); add("arig-cipher.jar")
+		add("--dest"); add(outputDir.absolutePath)
+		add("--java-options"); add("--enable-native-access=ALL-UNNAMED")
+		add("--icon"); add(layout.projectDirectory.file("src/main/resources/org/arig/lucifer/fx/logo.png").asFile.absolutePath)
+	})
 }
