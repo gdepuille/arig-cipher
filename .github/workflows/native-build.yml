@@ -47,11 +47,12 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Setup GraalVM JDK 25
+      - name: Setup Liberica JDK 25 avec JavaFX
         uses: graalvm/setup-graalvm@v1
         with:
           java-version: '25'
-          distribution: 'graalvm-community'
+          distribution: 'liberica'
+          java-package: 'jdk+fx'
           github-token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Cache Gradle
