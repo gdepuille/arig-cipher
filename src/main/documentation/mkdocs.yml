@@ -1,15 +1,16 @@
 site_name: ARIG Cipher
 site_description: Application desktop de chiffrement de fichiers par l'algorithme Lucifer — projet ARIG Robotique
 site_author: ARIG Robotique
+site_url: https://gdepuille.github.io/arig-cipher/
 docs_dir: docs
-repo_url: https://github.com/arig-robotique/lucifer
-repo_name: arig-robotique/lucifer
+repo_url: https://github.com/gdepuille/arig-cipher
+repo_name: gdepuille/arig-cipher
 
 theme:
   name: material
   language: fr
-  logo: assets/logo.png
-  favicon: assets/logo.png
+  logo: assets/images/logo.png
+  favicon: assets/images/logo.png
   palette:
     - media: "(prefers-color-scheme: light)"
       scheme: default
