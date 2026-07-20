@@ -62,6 +62,34 @@ tasks.named<Jar>("jar") {
 	enabled = false
 }
 
+graalvmNative {
+	binaries.named("main") {
+		imageName.set("arig-cipher")
+		buildArgs.addAll(
+			"--no-fallback",
+			"--enable-native-access=ALL-UNNAMED",
+			"-H:+AddAllCharsets",
+		)
+	}
+}
+
+// Affiche la version propre (sans -SNAPSHOT) — utilisé par le CI
+tasks.register("printVersion") {
+	group = "help"
+	doLast { println(version.toString().substringBefore("-")) }
+}
+
+// Build natif via Liberica NIK + copie dans dist/ : ./gradlew distNative
+tasks.register<Copy>("distNative") {
+	group = "distribution"
+	description = "Compile en natif (Liberica NIK) et copie le binaire dans dist/"
+	dependsOn("nativeCompile")
+	from(layout.buildDirectory.dir("native/nativeCompile")) {
+		include("arig-cipher*")
+	}
+	into(layout.projectDirectory.dir("dist"))
+}
+
 // Package avec jpackage pour usage local : ./gradlew distJpackage
 tasks.register<Exec>("distJpackage") {
 	group = "distribution"
